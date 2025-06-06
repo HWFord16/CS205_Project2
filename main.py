@@ -1,4 +1,5 @@
 import time
+import csv
 from Tree import Tree
 
 
@@ -37,6 +38,14 @@ def main():
 
     print(f"\nFinished Search! The best feature subset is {tree.best_feature_set}, with an accuracy of {tree.best_score * 100:.1f}%.\n")
     print(f"Feature selection took {end_time - start_time:.2f} seconds.\n")
+
+    #log best feature subsets and accurarcies for plotting
+    # Write CSV for plotting
+    log_filename = "accuracy_log.csv"
+    with open(log_filename, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["Num_Features", "Accuracy"])
+        writer.writerows(tree.accuracyLog)
 
 if __name__ == "__main__":
     main()

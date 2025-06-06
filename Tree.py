@@ -10,6 +10,7 @@ class Tree:
       self.num_instances = self.dataset[0].shape[0]
       self.num_features = self.dataset[0].shape[1]
       feature_set = [i for i in range(self.num_features)]
+      self.accuracyLog= []
 
       if method == "forward":
         self.root = Node(current_features= [], features=feature_set)
@@ -37,6 +38,7 @@ class Tree:
 
             for child in n.children:
                 child.score = self.evaluate(child)  #evaluate each new configuration after contraction
+                self.accuracyLog.append((len(child.current_features), child.score)) 
                 print(f"Using feature {child.current_features} accuracy is {child.score * 100:.1f}%")
 
                 if best_child is None or child.score > best_child.score:
@@ -70,6 +72,7 @@ class Tree:
 
             for child in current_node.children:
                 child.score = self.evaluate(child)  #evaluate the addition of each new feature
+                self.accuracyLog.append((len(child.current_features), child.score))
                 print(f"Using feature(s) {child.current_features} accuracy is {child.score * 100 :.1f}%")
 
                 if best_child is None or child.score > best_child.score:
