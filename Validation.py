@@ -1,11 +1,10 @@
 import time
 import numpy as np
-import Classifier
 
 ### Perform Leave one out cross validation (LOOCV)
 def validation(features, clf, dataset, output_trace = False): #input a set of features and classifier
-    feature_set = [x-1 for x in features] #convert feature list to 0-index
-
+    #feature_set = [x-1 for x in features] #convert feature list to 0-index
+    feature_set = features #feature list
     correct = 0  #correct predictions counter
     total = len(dataset[0]) #instances in dataset
 

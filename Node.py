@@ -1,6 +1,5 @@
 from Validation import validation
 from Classifier import NNClassifier
-from Classifier import read_data
 
 class Node:
     def __init__(self, parent = None, score = None, current_features= [], features= []):

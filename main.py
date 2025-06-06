@@ -1,3 +1,4 @@
+import time
 from Tree import Tree
 
 
@@ -21,16 +22,21 @@ def main():
     if choice == '1':
         print("\nForward Selection chosen.")
         tree = Tree(data_file = file, method='forward')
+        start_time = time.perf_counter()
         tree.forward_selection()
+        end_time  = time.perf_counter()
     elif choice == '2':
         print("\nBackward Elimination chosen.")
         tree = Tree(data_file = file, method='backward')
+        start_time = time.perf_counter()
         tree.backward_elimination()
+        end_time  = time.perf_counter()
     else:
         print("\nInvalid choice. Exiting.")
         return
 
-    print(f"\nFinished Search! The best feature subset is {tree.best_feature_set}, with an accuracy of {tree.best_score * 100:.1f}%.\n\n")
+    print(f"\nFinished Search! The best feature subset is {tree.best_feature_set}, with an accuracy of {tree.best_score * 100:.1f}%.\n")
+    print(f"Feature selection took {end_time - start_time:.2f} seconds.\n")
 
 if __name__ == "__main__":
     main()
