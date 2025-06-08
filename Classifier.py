@@ -18,11 +18,12 @@ class NNClassifier:
         return self.trainLabels[nearest_point]
 
 
-#normalize data/features : z-score normalization
+#normalize data/features 
 def normalize(features):
-    mean = np.mean(features, axis=0)
-    std = np.std(features, axis=0)
-    return (features - mean) / std
+    min = np.min(features, axis=0) #minimum per column
+    max = np.max(features, axis=0) #max per column
+    features = (features - min) / (max - min) #scale range[0,1]
+    return features 
 
 #read dataset file from input and return features & labels
 def read_data(filename, normal = True):

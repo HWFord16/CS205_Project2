@@ -26,7 +26,8 @@ class Tree:
 
     def backward_elimination(self):
         n = self.root
-        initial_score = self.evaluate(n)  #simulating an initial accuracy
+        initial_score = self.evaluate(n)  #predicting an initial accuracy
+        self.accuracyLog.append((n.current_features, initial_score))
         print(f"\nThis dataset has {self.num_features} features (not including class attribute), with {self.num_instances} instances.")
         print(f"\nRunning Nearest Neighbor with all features and using LOOCV gets an accuracy of {initial_score*100:.1f}%")
         print("\n====Beginning search====\n")
@@ -38,7 +39,6 @@ class Tree:
 
             for child in n.children:
                 child.score = self.evaluate(child)  #evaluate each new configuration after contraction
-                self.accuracyLog.append((len(child.current_features), child.score)) 
                 print(f"Using feature {child.current_features} accuracy is {child.score * 100:.1f}%")
 
                 if best_child is None or child.score > best_child.score:
@@ -46,6 +46,7 @@ class Tree:
 
             #update the best feature set if the new configuration is better
             if best_child:
+                self.accuracyLog.append((best_child.current_features, best_child.score))
                 if best_child.score > self.best_score:
                   self.best_score = best_child.score
                   self.best_feature_set = best_child.current_features
@@ -54,15 +55,14 @@ class Tree:
                 n = best_child  #move to the best child node for further reduction
             else:
                 break
-
-        #print(f"\nFinished search!! The best feature subset is {self.best_feature_set}, with an accuracy of {self.best_score:.2f}%")
         return self.best_feature_set
 
     def forward_selection(self):
         current_node = self.root
-        initial_score = self.evaluate(current_node)  #simulating an initial accuracy
+        initial_score = self.evaluate(current_node)  #prediciting an initial accuracy
+        self.accuracyLog.append((current_node.current_features, initial_score))
         print(f"\nThis dataset has {self.num_features} features (not including class attribute), with {self.num_instances} instances.")
-        print(f"\nRunning Nearest Neighbor with all features and using LOOCV gets an accuracy of {initial_score*100:.1f}%")
+        print(f"\nRunning Nearest Neighbor with no features and using LOOCV gets an accuracy of {initial_score*100:.1f}%")
         print("\n====Beginning search====\n")
 
         #start with no features and expand by adding features
@@ -72,22 +72,21 @@ class Tree:
 
             for child in current_node.children:
                 child.score = self.evaluate(child)  #evaluate the addition of each new feature
-                self.accuracyLog.append((len(child.current_features), child.score))
                 print(f"Using feature(s) {child.current_features} accuracy is {child.score * 100 :.1f}%")
 
                 if best_child is None or child.score > best_child.score:
                     best_child = child
-
-            if best_child and (best_child.score > self.best_score):
-                self.best_score = best_child.score
-                self.best_feature_set = best_child.current_features
-                print(f"\nFeature set {best_child.current_features} was best, accuracy is {best_child.score * 100:.1f}%\n")
+            
+            if best_child: #log the best child found at the depth
+                self.accuracyLog.append((best_child.current_features, best_child.score))
+                if best_child.score > self.best_score:
+                    self.best_score = best_child.score
+                    self.best_feature_set = best_child.current_features
+                    print(f"\nFeature set {best_child.current_features} was best, accuracy is {best_child.score * 100:.1f}%\n")
 
             #move to the best child for further expansion
             if best_child:
                 current_node = best_child
             else:
                 break
-
-        #print(f"\nFinished search!! The best feature subset is {self.best_feature_set}, with an accuracy of {self.best_score:.2f}%")
         return self.best_feature_set

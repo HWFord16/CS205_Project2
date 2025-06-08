@@ -1,2 +1,4 @@
 __pycache__
 accuracy_log.csv
+diabetes_data_upload.csv
+plotScript.py

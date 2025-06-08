@@ -1,18 +1,21 @@
 import time
 import csv
+import json
 from Tree import Tree
 
 
 def main():
     print("\n\nWelcome to Harrison Feature's Selection Algorithm.\n")
-    print("\nChoose the Dataset:\n1: \tSmall Dataset #18\n2: \tLarge Dataset #10")
-    choice = input("Enter your choice (1 or 2): ")
+    print("\nChoose the Dataset:\n1: \tSmall Dataset #18\n2: \tLarge Dataset #10\n3: \tDiabetes Dataset\n")
+    choice = input("Enter your choice (1 or 2 or 3): ")
 
 
     if   (choice == '1'):
         file = 'CS205_small_Data__18.txt'
     elif (choice == '2'):
         file = 'CS205_large_Data__10.txt'
+    elif (choice == '3'):
+        file = 'diabetes_data.txt'
     else:
         print("Invalid choice.")
         return
@@ -40,12 +43,12 @@ def main():
     print(f"Feature selection took {end_time - start_time:.2f} seconds.\n")
 
     #log best feature subsets and accurarcies for plotting
-    # Write CSV for plotting
     log_filename = "accuracy_log.csv"
     with open(log_filename, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["Num_Features", "Accuracy"])
-        writer.writerows(tree.accuracyLog)
+        writer.writerow(["Feature_Set", "Accuracy"])
+        for feature_set, acc in tree.accuracyLog:
+            writer.writerow([json.dumps(feature_set), acc])
 
 if __name__ == "__main__":
     main()
